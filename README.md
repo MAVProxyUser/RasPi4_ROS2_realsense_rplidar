@@ -28,9 +28,14 @@ dtoverlay=imx477,media-controller=0
 gpu_mem=256
 dtoverlay=vc4-kms-v3d
 
-
 # Re-enable the legacy config with raspi-config
 https://www.youtube.com/watch?v=E7KPSc_Xr24
+
+# increase SWAP memory
+sudo dphys-swapfile swapoff
+sudo nano /etc/dphys-swapfile (set CONF_MAXSWAP=8192, CONF_SWAPSIZE=, and CONF_SWAPFACTOR=4, 
+sudo dphys-swapfile setup
+sudo dphys-swapfile swapon
 
 # Install ROS2 per instructions at https://docs.ros.org/en/galactic/Installation/Maintaining-a-Source-Checkout.html (broken out below)
 export ROS_DISTRO=galactic
@@ -52,28 +57,18 @@ rosdep update
 cd src/
 git clone https://github.com/iRobotEducation/irobot_create_msgs.git -b galactic
 cd ..
-sudo dphys-swapfile swapoff
-sudo nano /etc/dphys-swapfile (set CONF_MAXSWAP=8192, CONF_SWAPSIZE=, and CONF_SWAPFACTOR=4, 
-sudo dphys-swapfile setup
-sudo dphys-swapfile swapon
-
 rosdep install -r --from-paths . --ignore-src --rosdistro galactic -y
 colcon build --symlink-install --parallel-workers 20 --event-handlers console_direct+ 
-
-. install/local_setup.bash
-echo source /home/pi/ros2_galactic/install/local_setup.bash >> ~/.bashrc
 
 # update with dynamixal support:
 git clone https://github.com/ROBOTIS-GIT/DynamixelSDK.git -b galactic-devel
 colcon build --symlink-install --parallel-workers 20 --packages-skip-build-finished --event-handlers console_direct+ 
-
 
 # update with rplidar support 
 cd src
 git clone https://github.com/Slamtec/rplidar_ros.git -b ros2
 pico +12 rplidar_ros/CMakeLists.txt (add -Wno-narrowing)
 colcon build --symlink-install --parallel-workers 20 --packages-skip-build-finished --event-handlers console_direct+ 
-
 
 # start getting fancy with nav2
 git clone https://github.com/SeanReg/nav2_wavefront_frontier_exploration.git nav2_wfd
@@ -85,7 +80,6 @@ git clone https://github.com/ros/bond_core.git -b galactic
 git clone https://github.com/ompl/ompl.git
 git clone https://github.com/ros-perception/vision_opencv.git -b galactic
 git clone https://github.com/BehaviorTree/BehaviorTree.CPP.git -b v3.8
-#git clone https://github.com/ros2/common_interfaces.git -b galactic 
 git clone https://github.com/robo-friends/m-explore-ros2.git
 cd m-explore-ros2
 git config --global user.email "you@example.com"
@@ -161,16 +155,6 @@ cd ..
 rosdep install -i --from-path src --rosdistro $ROS_DISTRO --skip-keys=librealsense2 -y
 colcon build --symlink-install --parallel-workers 20 --packages-skip-build-finished --event-handlers console_direct+ --packages-up-to  realsense2_camera
 
-# Lauch realsense cam
-realsense-viewer
-ros2 launch realsense2_camera rs_launch.py
-
-# Launch RPLidar s1
-sudo chmod 777 /dev/ttyUSB0 
-ros2 launch rplidar_ros2 rplidar_s1_launch.py (without rviz)
-ros2 launch rplidar_ros2 view_rplidar_s1_launch.py (with rviz)
-
-
 #############################################################
 Work in progress - alternative instead of manual steps above
 #############################################################
@@ -185,5 +169,23 @@ rm package.xml
 wget https://raw.githubusercontent.com/MAVProxyUser/RasPi4_ROS2_realsense_rplidar/main/package.xml
 cd ..
 rosdep install -i --from-path src --rosdistro $ROS_DISTRO --skip-keys=librealsense2 -y
+export ROS_DISTRO=galactic
 colcon build --symlink-install --parallel-workers 20 --packages-skip-build-finished --event-handlers console_direct+ --cmake-args -DBUILD_TESTING=OFF --continue-on-error --cmake-args -DCMAKE_CXX_STANDARD=17
+
+# Add new ROS install to environment for immediate use, and persistent use. 
+. install/local_setup.bash
+echo source /home/pi/ros2_galactic/install/local_setup.bash >> ~/.bashrc
+
+# Example: launch realsense cam
+realsense-viewer
+ros2 launch realsense2_camera rs_launch.py
+
+# Example: launch RPLidar s1
+sudo chmod 777 /dev/ttyUSB0 
+ros2 launch rplidar_ros2 rplidar_s1_launch.py (without rviz)
+ros2 launch rplidar_ros2 view_rplidar_s1_launch.py (with rviz)
+
+# Example: WFD explorer
+ros2 launch nav2_bringup navigation_launch.py
+ros2 run nav2_wfd explore
 ```
