@@ -186,6 +186,11 @@ ros2 launch rplidar_ros2 rplidar_s1_launch.py (without rviz)
 ros2 launch rplidar_ros2 view_rplidar_s1_launch.py (with rviz)
 
 # Example: WFD explorer
-ros2 launch nav2_bringup navigation_launch.py
+ros2 launch nav2_bringup navigation_launch.py slam:=True
 ros2 run nav2_wfd explore
+
+# Example: M-Explore
+ros2 launch nav2_bringup navigation_launch.py slam:=True
+ros2 launch explore_lite explore.launch.py
+
 ```
