@@ -173,7 +173,7 @@ ros2 launch realsense2_camera rs_launch.py
 sudo chmod 777 /dev/ttyUSB0 
 ros2 launch rplidar_ros2 rplidar_s1_launch.py (without rviz)
 ros2 launch rplidar_ros2 view_rplidar_s1_launch.py (with rviz)
-```
+
 
 #############################################
 Work in progress - alternative instead
@@ -182,3 +182,4 @@ wget https://raw.githubusercontent.com/MAVProxyUser/RasPi4_ROS2_realsense_rplida
 cd ~/ros2_galactic/
 sudo pip install -U vcstool
 vcs import src < vcs_repos.txt
+```
