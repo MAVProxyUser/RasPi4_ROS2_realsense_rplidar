@@ -98,9 +98,6 @@ pico /home/pi/ros2_galactic/build/pluginlib/pluginlib_enable_plugin_testing/inst
 # build without Gazebo support
 colcon build --symlink-install --parallel-workers 20 --packages-skip-build-finished --event-handlers console_direct+ --packages-ignore nav2_system_tests
 
-# build without all the testing & don't stop! 
-colcon build --symlink-install --parallel-workers 20 --packages-skip-build-finished --event-handlers console_direct+ --packages-ignore nav2_system_tests --cmake-args -DBUILD_TESTING=OFF --continue-on-error
-
 # Add Gazebo dependencies 
 sudo apt-get install libfreeimage-dev libfreeimageplus-dev
 sudo apt-get install libprotobuf-dev libprotobuf-c-dev
@@ -133,7 +130,8 @@ git clone https://github.com/ignitionrobotics/ign-transport -b ign-transport4
 git clone https://github.com/ignitionrobotics/ign-msgs -b ign-msgs1
 
 cd ..
-colcon build --symlink-install --parallel-workers 20 --packages-skip-build-finished --event-handlers console_direct+ --packages-up-to gazebo_dev
+# build without all the testing & don't stop, but include Gazebo! 
+colcon build --symlink-install --parallel-workers 20 --packages-skip-build-finished --event-handlers console_direct+ --cmake-args -DBUILD_TESTING=OFF --continue-on-error --cmake-args -DCMAKE_CXX_STANDARD=17 --packages-up-to nav2_system_tests
 
 # add Intel RealSense D4xx
 sudo apt-get install automake libtool vim cmake libusb-1.0-0-dev libx11-dev xorg-dev libglu1-mesa-dev
@@ -149,10 +147,8 @@ sudo apt-get install python3-protobuf
 mkdir  build  && cd build
 make -j1
 sudo make install
-export PYTHONPATH=$PYTHONPATH:/usr/local/lib
-sudo apt-get install python3-opengl
-sudo -H pip3 install pyopengl
-sudo -H pip3 install pyopengl_accelerate
+echo export PYTHONPATH=$PYTHONPATH:/usr/local/lib > ~/.bashrc
+
 rs-enumerate-devices 
 cmake .. -DBUILD_PYTHON_BINDINGS=bool:true -DPYTHON_EXECUTABLE=$(which python3)
 make -j4
@@ -163,7 +159,7 @@ git clone https://github.com/ros/diagnostics.git -b galactic
 
 cd ..
 rosdep install -i --from-path src --rosdistro $ROS_DISTRO --skip-keys=librealsense2 -y
-colcon build --symlink-install --parallel-workers 2 --packages-skip-build-finished --event-handlers console_direct+ --packages-up-to  realsense2_camera
+colcon build --symlink-install --parallel-workers 20 --packages-skip-build-finished --event-handlers console_direct+ --packages-up-to  realsense2_camera
 
 # Lauch realsense cam
 realsense-viewer
@@ -182,4 +178,33 @@ wget https://raw.githubusercontent.com/MAVProxyUser/RasPi4_ROS2_realsense_rplida
 cd ~/ros2_galactic/
 sudo pip install -U vcstool
 vcs import src < vcs_repos.txt
+edit janitor/package.xml
+(
+add:
+  <depend>libfreeimage-dev</depend>
+  <depend>libfreeimageplus-dev</depend>
+  <depend>libprotobuf-dev</depend>
+  <depend>libprotobuf-c-dev</depend>
+  <depend>libtar-dev</depend>
+  <depend>libsdformat6-dev</depend>
+  <depend>libopenal-dev</depend>
+  <depend>libgraphviz-dev</depend>
+  <depend>liboctovis-dev</depend>
+  <depend>xsltproc</depend>
+  <depend>libhdf5-dev</depend>
+  <depend>libsimbody-dev</depend>
+  <depend>libqwt-qt5-dev</depend>
+  <depend>libdart-all-dev</depend>
+  <depend>libignition-transport4-dev</depend>
+  <depend>libignition-math4-dev</depend>
+  <depend>libignition-msgs-dev</depend>
+  <depend>libignition-fuel-tools1-dev</depend>
+  <depend>ruby-dev</depend>
+  <depend>openjdk-11-jdk-headless</depend>
+  <depend>python3-colcon-common-extensions</depend>
+  <depend>python3-rosdep2</depend>
+  <depend>python3-pyopengl</depend>
+)
+rosdep install -r --from-paths janitor/ --ignore-src -y
+
 ```
