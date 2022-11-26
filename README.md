@@ -171,41 +171,19 @@ ros2 launch rplidar_ros2 rplidar_s1_launch.py (without rviz)
 ros2 launch rplidar_ros2 view_rplidar_s1_launch.py (with rviz)
 
 
-#############################################
-Work in progress - alternative instead
-#############################################
+#############################################################
+Work in progress - alternative instead of manual steps above
+#############################################################
 wget https://raw.githubusercontent.com/MAVProxyUser/RasPi4_ROS2_realsense_rplidar/main/vcs_repos.txt
 cd ~/ros2_galactic/
 sudo pip install -U vcstool
 vcs import src < vcs_repos.txt
+cd src
 ros2 pkg create --build-type ament_cmake janitor
-edit janitor/package.xml
-(
-add:
-  <depend>libfreeimage-dev</depend>
-  <depend>libfreeimageplus-dev</depend>
-  <depend>libprotobuf-dev</depend>
-  <depend>libprotobuf-c-dev</depend>
-  <depend>libtar-dev</depend>
-  <depend>libsdformat6-dev</depend>
-  <depend>libopenal-dev</depend>
-  <depend>libgraphviz-dev</depend>
-  <depend>liboctovis-dev</depend>
-  <depend>xsltproc</depend>
-  <depend>libhdf5-dev</depend>
-  <depend>libsimbody-dev</depend>
-  <depend>libqwt-qt5-dev</depend>
-  <depend>libdart-all-dev</depend>
-  <depend>libignition-transport4-dev</depend>
-  <depend>libignition-math4-dev</depend>
-  <depend>libignition-msgs-dev</depend>
-  <depend>libignition-fuel-tools1-dev</depend>
-  <depend>ruby-dev</depend>
-  <depend>openjdk-11-jdk-headless</depend>
-  <depend>python3-colcon-common-extensions</depend>
-  <depend>python3-rosdep2</depend>
-  <depend>python3-pyopengl</depend>
-)
-rosdep install -r --from-paths janitor/ --ignore-src -y
-
+cd janitor
+rm package.xml 
+wget https://raw.githubusercontent.com/MAVProxyUser/RasPi4_ROS2_realsense_rplidar/main/package.xml
+cd ..
+rosdep install -i --from-path src --rosdistro $ROS_DISTRO --skip-keys=librealsense2 -y
+colcon build --symlink-install --parallel-workers 20 --packages-skip-build-finished --event-handlers console_direct+ --cmake-args -DBUILD_TESTING=OFF --continue-on-error --cmake-args -DCMAKE_CXX_STANDARD=17
 ```
