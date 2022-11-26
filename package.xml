@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>janitor</name>
+  <version>0.0.0</version>
+  <description>TODO: Package description</description>
+  <maintainer email="you@example.com">pi</maintainer>
+  <license>TODO: License declaration</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <depend>libfreeimage-dev</depend>
+  <depend>libfreeimageplus-dev</depend>
+  <depend>libprotobuf-dev</depend>
+  <depend>libprotobuf-c-dev</depend>
+  <depend>libtar-dev</depend>
+  <depend>libsdformat6-dev</depend>
+  <depend>libopenal-dev</depend>
+  <depend>libgraphviz-dev</depend>
+  <depend>liboctovis-dev</depend>
+  <depend>xsltproc</depend>
+  <depend>libhdf5-dev</depend>
+  <depend>libsimbody-dev</depend>
+  <depend>libqwt-qt5-dev</depend>
+  <depend>libdart-all-dev</depend>
+  <depend>libignition-transport4-dev</depend> 
+  <depend>libignition-math4-dev</depend> 
+  <depend>libignition-msgs-dev</depend>
+  <depend>libignition-fuel-tools1-dev</depend>
+  <depend>ruby-dev</depend>
+  <depend>openjdk-11-jdk-headless</depend>
+  <depend>python3-colcon-common-extensions</depend>
+  <depend>python3-rosdep2</depend>
+
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
