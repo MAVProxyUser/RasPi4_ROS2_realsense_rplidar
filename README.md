@@ -178,6 +178,7 @@ wget https://raw.githubusercontent.com/MAVProxyUser/RasPi4_ROS2_realsense_rplida
 cd ~/ros2_galactic/
 sudo pip install -U vcstool
 vcs import src < vcs_repos.txt
+ros2 pkg create --build-type ament_cmake janitor
 edit janitor/package.xml
 (
 add:
