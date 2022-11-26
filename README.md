@@ -1,26 +1,26 @@
 
 ```
-Raspi 4
+# Raspi 4
 https://www.raspberrypi.com/products/raspberry-pi-4-model-b/
 
-512 Gb U3 A2 SDXC V30 Micro SD card
+# 512 Gb U3 A2 SDXC V30 Micro SD card
 https://www.amazon.com/SanDisk-Extreme-microSDXC-Memory-Adapter/dp/B07P7M6K35
 
-RasPi High Quality camera
+# RasPi High Quality camera
 https://www.raspberrypi.com/products/raspberry-pi-high-quality-camera/
 
-Install RasPi OS Bullseye
+# Install RasPi OS Bullseye
 https://www.raspberrypi.com/news/raspberry-pi-os-debian-bullseye/
 Raspberry Pi OS (other) -> Raspberry Pi OS (64-bit)
 
-Use Raspberry Pi Imager tool
+# Use Raspberry Pi Imager tool
 https://www.raspberrypi.com/news/raspberry-pi-imager-imaging-utility/
 https://www.raspberrypi.com/software/
 
-Or manually install
+# Or manually install
 https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-64-bit
 
-Edit boot config to support the High Quality camera. 
+# Edit boot config to support the High Quality camera. 
 /boot/config.txt:
 [all]
 camera_auto_detect=0
@@ -29,7 +29,7 @@ gpu_mem=256
 dtoverlay=vc4-kms-v3d
 
 
-Re-enable the legacy config with raspi-config
+# Re-enable the legacy config with raspi-config
 https://www.youtube.com/watch?v=E7KPSc_Xr24
 
 # Install ROS2 per instructions at https://docs.ros.org/en/galactic/Installation/Maintaining-a-Source-Checkout.html (broken out below)
@@ -80,7 +80,6 @@ git clone https://github.com/SeanReg/nav2_wavefront_frontier_exploration.git nav
 pico /home/pi/ros2_galactic/src/nav2_wfd/package.xml (adjust line road  <maintainer email="stop@warning.com">Sean Regan</maintainer> )
 
 git clone https://github.com/ros-planning/navigation2.git nav2 -b galactic
-# pico nav2/src/nav2/nav2_behavior_tree/CMakeLists.txt:find_package(behaviortree_cpp_v3 REQUIRED) - change to find_package(behaviortree_cpp REQUIRED)
 git clone https://github.com/SteveMacenski/slam_toolbox.git -b galactic
 git clone https://github.com/ros/bond_core.git -b galactic 
 git clone https://github.com/ompl/ompl.git
