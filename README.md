@@ -157,7 +157,7 @@ rs-enumerate-devices
 cmake .. -DBUILD_PYTHON_BINDINGS=bool:true -DPYTHON_EXECUTABLE=$(which python3)
 make -j4
 sudo make install
-Cd ~/ros2_galactic/src
+cd ~/ros2_galactic/src
 git clone https://github.com/IntelRealSense/realsense-ros.git -b ros2-development
 git clone https://github.com/ros/diagnostics.git -b galactic
 
@@ -174,3 +174,11 @@ sudo chmod 777 /dev/ttyUSB0
 ros2 launch rplidar_ros2 rplidar_s1_launch.py (without rviz)
 ros2 launch rplidar_ros2 view_rplidar_s1_launch.py (with rviz)
 ```
+
+#############################################
+Work in progress - alternative instead
+#############################################
+wget https://raw.githubusercontent.com/MAVProxyUser/RasPi4_ROS2_realsense_rplidar/main/vcs_repos.txt
+cd ~/ros2_galactic/
+sudo pip install -U vcstool
+vcs import src < vcs_repos.txt
