@@ -150,7 +150,7 @@ sudo make install
 cd ~/ros2_galactic/src
 git clone https://github.com/IntelRealSense/realsense-ros.git -b ros2-development
 git clone https://github.com/ros/diagnostics.git -b galactic
-
+git clone https://github.com/aarsht7/teleop_cpp_ros2.git
 cd ..
 rosdep install -i --from-path src --rosdistro $ROS_DISTRO --skip-keys=librealsense2 -y
 colcon build --symlink-install --parallel-workers 20 --packages-skip-build-finished --event-handlers console_direct+ --packages-up-to  realsense2_camera
