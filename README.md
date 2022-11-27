@@ -172,6 +172,8 @@ rosdep install -i --from-path src --rosdistro $ROS_DISTRO --skip-keys=librealsen
 export ROS_DISTRO=galactic
 colcon build --symlink-install --parallel-workers 20 --packages-skip-build-finished --event-handlers console_direct+ --cmake-args -DBUILD_TESTING=OFF --continue-on-error --cmake-args -DCMAKE_CXX_STANDARD=17
 
+#############################################################
+
 # Add new ROS install to environment for immediate use, and persistent use. 
 . install/local_setup.bash
 echo source /home/pi/ros2_galactic/install/local_setup.bash >> ~/.bashrc
@@ -192,5 +194,53 @@ ros2 run nav2_wfd explore
 # Example: M-Explore
 ros2 launch nav2_bringup navigation_launch.py slam:=True
 ros2 launch explore_lite explore.launch.py
+
+# Example: Twist Keyboardnodes
+ros2 run teleop_cpp_ros2 teleop
+
+# Dynamixel example
+# Make sure to adjust your addresses before compile
+mkdir ~/ros2_galactic/src/DynamixelSDK/dynamixel_sdk/build
+cd ~/ros2_galactic/src/DynamixelSDK/dynamixel_sdk/build
+make -j4
+sudo make install
+sudo su
+echo /usr/local/lib >> /etc/ld.so.conf
+ldconfig
+exit
+
+diff --git a/ros/dynamixel_sdk_examples/src/read_write_node.cpp b/ros/dynamixel_sdk_examples/src/read_write_node.cpp
+index bd9a8c9..8651634 100644
+--- a/ros/dynamixel_sdk_examples/src/read_write_node.cpp
++++ b/ros/dynamixel_sdk_examples/src/read_write_node.cpp
+@@ -44,12 +44,12 @@
+ using namespace dynamixel;
+
+ // Control table address
+-#define ADDR_TORQUE_ENABLE    64
+-#define ADDR_GOAL_POSITION    116
+-#define ADDR_PRESENT_POSITION 132
++#define ADDR_TORQUE_ENABLE    24
++#define ADDR_GOAL_POSITION    30
++#define ADDR_PRESENT_POSITION 36
+
+ // Protocol version
+-#define PROTOCOL_VERSION      2.0             // Default Protocol version of DYNAMIXEL X series.
++#define PROTOCOL_VERSION      1.0             // Default Protocol version of DYNAMIXEL X series.
+
+ // Default setting
+ #define DXL1_ID               1               // DXL1 ID
+
+ros2 run dynamixel_sdk_examples read_write_node
+ros2 service call /get_position dynamixel_sdk_custom_interfaces/srv/GetPosition "id: 1"
+ros2 service call /get_position dynamixel_sdk_custom_interfaces/srv/GetPosition "id: 2"
+ros2 topic pub -1 /set_position dynamixel_sdk_custom_interfaces/SetPosition "{id: 1, position: 100}"
+ros2 topic pub -1 /set_position dynamixel_sdk_custom_interfaces/SetPosition "{id: 2, position: 200}"
+
+# Talk to iRobot
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+ros2 topic list (first time fails)
+ros2 topic list
+ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.1, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.0}}"
 
 ```
