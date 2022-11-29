@@ -209,27 +209,28 @@ echo /usr/local/lib >> /etc/ld.so.conf
 ldconfig
 exit
 
-diff --git a/ros/dynamixel_sdk_examples/src/read_write_node.cpp b/ros/dynamixel_sdk_examples/src/read_write_node.cpp
-index bd9a8c9..8651634 100644
---- a/ros/dynamixel_sdk_examples/src/read_write_node.cpp
-+++ b/ros/dynamixel_sdk_examples/src/read_write_node.cpp
-@@ -44,12 +44,12 @@
- using namespace dynamixel;
-
- // Control table address
--#define ADDR_TORQUE_ENABLE    64
--#define ADDR_GOAL_POSITION    116
+pi@wingman:~/ros2_galactic/src/DynamixelSDK $ git diff
+diff --git a/dynamixel_sdk_examples/src/read_write_node.cpp b/dynamixel_sdk_examples/src/read_write_node.cpp
+index ecbf8ec..15de3c7 100644
+--- a/dynamixel_sdk_examples/src/read_write_node.cpp
++++ b/dynamixel_sdk_examples/src/read_write_node.cpp
+@@ -41,12 +41,12 @@
+ 
+ // Control table address for X series (except XL-320)
+ #define ADDR_OPERATING_MODE 11
+-#define ADDR_TORQUE_ENABLE 64
+-#define ADDR_GOAL_POSITION 116
 -#define ADDR_PRESENT_POSITION 132
-+#define ADDR_TORQUE_ENABLE    24
-+#define ADDR_GOAL_POSITION    30
++#define ADDR_TORQUE_ENABLE 24
++#define ADDR_GOAL_POSITION 30
 +#define ADDR_PRESENT_POSITION 36
-
+ 
  // Protocol version
--#define PROTOCOL_VERSION      2.0             // Default Protocol version of DYNAMIXEL X series.
-+#define PROTOCOL_VERSION      1.0             // Default Protocol version of DYNAMIXEL X series.
-
+-#define PROTOCOL_VERSION 2.0  // Default Protocol version of DYNAMIXEL X series.
++#define PROTOCOL_VERSION 1.0  // Default Protocol version of DYNAMIXEL X series.
+ 
  // Default setting
- #define DXL1_ID               1               // DXL1 ID
+ #define BAUDRATE 57600  // Default Baudrate of DYNAMIXEL X series
 
 ros2 run dynamixel_sdk_examples read_write_node
 ros2 service call /get_position dynamixel_sdk_custom_interfaces/srv/GetPosition "id: 1"
